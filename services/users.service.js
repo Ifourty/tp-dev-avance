@@ -43,3 +43,54 @@ export function getUserDataById(id, callback) {
             });
     });
 }
+
+export function editUserData(id, body, callback) {
+    connectToMongoDB(() => {
+        User.findByIdAndUpdate(id, body)
+            .then((user) => {
+                if (!user) {
+                    callback({
+                        success: false,
+                        errorMessage: 'User not found'
+                    });
+                    return;
+                }
+                callback({
+                    success: true,
+                });
+            })
+            .catch((error) => {
+                console.error('Error updating user data:', error);
+                callback({
+                    success: false,
+                    errorMessage: error.message
+                });
+            });
+    });
+}
+
+export function deleteUserData(id, callback) {
+    connectToMongoDB(() => {
+        User.findByIdAndDelete(id)
+            .then((user) => {
+                if (!user) {
+                    callback({
+                        success: false,
+                        errorMessage: 'User not found'
+                    });
+                    return;
+                }
+                callback({
+                    success: true,
+                    message: 'User deleted successfully'
+                });
+            })
+            .catch((error) => {
+                console.error('Error deleting user data:', error);
+                callback({
+                    success: false,
+                    errorMessage: error.message
+                });
+            });
+    });
+}

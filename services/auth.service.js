@@ -98,7 +98,7 @@ function generateJWTToken(user) {
     );
 }
 
-function verifyJWTToken(token) {
+export function verifyJWTToken(token) {
     const secretKey = process.env.JWT_SECRET;
     try {
         return jwt.verify(token, secretKey);

@@ -1,6 +1,6 @@
-import { checkRole } from "../services/auth.service.js";
+import { checkRole, verifyJWTToken } from "../services/auth.service.js";
 
-export function signUpMiddleware(req, res, next) {
+export function signUpCheckRoleMiddleware(req, res, next) {
     const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
     switch (req.body.role) {
         case 'admin':
@@ -26,6 +26,20 @@ export function signUpMiddleware(req, res, next) {
         default:
             next();
     }
+}
+
+export function isUserLoginMiddleware(req, res, next) {
+    const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+    if (token) {
+        if (verifyJWTToken(token)) {
+            next();
+            return;
+        }
+    }
+    res.status(401).json({
+        status: 'fail',
+        message: 'You must be logged in to access this resource'
+    });
 }
 
 
