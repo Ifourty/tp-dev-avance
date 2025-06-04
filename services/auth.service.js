@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
-import bcrypt from "bcrypt";
 import { connectToMongoDB } from "../utils/connectToMongoDB.js";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -72,7 +72,6 @@ export function checkRole(roles, token) {
         return false;
     }
 
-    console.log('Checking role for token:', token);
     const decodedToken = verifyJWTToken(token);
     if (!decodedToken) {
         return false;
@@ -101,7 +100,6 @@ function generateJWTToken(user) {
 
 function verifyJWTToken(token) {
     const secretKey = process.env.JWT_SECRET;
-    console.log('Verifying JWT token:', token);
     try {
         return jwt.verify(token, secretKey);
     } catch (error) {
