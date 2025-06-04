@@ -17,3 +17,29 @@ export function getUsersData(query, callback) {
         });
     });
 }
+
+export function getUserDataById(id, callback) {
+    connectToMongoDB(() => {
+        User.findById(id)
+            .then((user) => {
+                if (!user) {
+                    callback({
+                        success: false,
+                        errorMessage: 'User not found'
+                    });
+                    return;
+                }
+                callback({
+                    success: true,
+                    data: user
+                });
+            })
+            .catch((error) => {
+                console.error('Error reading user data:', error);
+                callback({
+                    success: false,
+                    errorMessage: error.message
+                });
+            });
+    });
+}
